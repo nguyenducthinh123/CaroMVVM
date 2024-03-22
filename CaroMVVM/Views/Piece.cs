@@ -67,7 +67,7 @@ namespace System
             else if (icon == 'x') DrawX();
         }
 
-        public Piece(Game game, int r, int c)
+        public Piece(int r, int c)
         {
             Row = r;
             Column = c;

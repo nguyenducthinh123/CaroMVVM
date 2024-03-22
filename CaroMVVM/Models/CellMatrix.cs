@@ -26,6 +26,7 @@ namespace System
             return (cells[row, col] == '\0');
         }
 
+        // SetCell đã tính win luôn rồi
         public Document SetCell(int row, int col, Player player, bool check) // khả năng phục vụ cho đánh online
         {
             Row = row;

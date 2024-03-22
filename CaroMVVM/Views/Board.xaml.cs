@@ -23,12 +23,11 @@ namespace CaroMVVM.Views
         public Board()
         {
             InitializeComponent();
-            CreateGame();
+            CreateBoard();
         }
 
-        public void CreateGame()
+        public void CreateBoard()
         {
-            var game = new SinglePlayer();
             int cell_size = ViewModelBase.Setting.CellSize;
             int size = ViewModelBase.Setting.Size;
 
@@ -52,18 +51,20 @@ namespace CaroMVVM.Views
             {
                 for (int c = 0; c < size; c++)
                 {
-                    var piece = new Piece(game, r, c);
+                    var piece = new Piece(r, c);
                     grid.Children.Add(piece);
                 }
             }
 
-            game.Changed += (doc) => {
-                int index = doc.Row * game.Size + doc.Column;
+            var game = new SinglePlayer();
+
+            Game.Changed += (doc) => {
+                int index = doc.Row * size + doc.Column;
                 var cell = grid.Children[index] as Piece;
                 cell.Put(doc.Icon);
             };
 
-            game.GameOver += (doc) =>
+            Game.GameOver += (doc) =>
             {
                 foreach(Piece p in grid.Children)
                 {
@@ -81,7 +82,8 @@ namespace CaroMVVM.Views
                 game.PutAndCheckOver(r, c);
             };
 
-            game.Start();
+            // Mình để Start trong hàm khởi tạo luôn rồi
+            //game.Start();
 
             // để game xử lí
             //game.PutFirsrPlayer();

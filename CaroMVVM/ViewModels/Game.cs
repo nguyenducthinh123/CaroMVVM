@@ -17,8 +17,8 @@ namespace System
         Player current;
         CellMatrix cellMatrix;
 
-        public event Action<Document> Changed;
-        public event Action<Document> GameOver;
+        public static event Action<Document> Changed;
+        public static event Action<Document> GameOver;
         //public event EventHandler<GameEventArg> GameOver;
 
         public Player Player
@@ -68,6 +68,9 @@ namespace System
 
         protected void RaiseChanged(Document doc) => Changed?.Invoke(doc);
         protected void RaiseGameOver(Document doc) => GameOver?.Invoke(doc);
+
+        
+
         //protected void RaiseGameOver(Document doc) => GameOver?.Invoke(this, new GameEventArg { Document = doc });
         protected virtual void SwitchPlayer()
         {
