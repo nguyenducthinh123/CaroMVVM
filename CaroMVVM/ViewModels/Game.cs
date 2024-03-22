@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace System
 {
-    public class GameEventArg : EventArgs
-    {
-        public Document Document { get; set; }
-    }
+    //public class GameEventArg : EventArgs
+    //{
+    //    public Document Document { get; set; }
+    //}
 
     public class Game : ViewModelBase
     {
@@ -18,7 +18,8 @@ namespace System
         CellMatrix cellMatrix;
 
         public event Action<Document> Changed;
-        public event EventHandler<GameEventArg> GameOver;
+        public event Action<Document> GameOver;
+        //public event EventHandler<GameEventArg> GameOver;
 
         public Player Player
         {
@@ -44,11 +45,17 @@ namespace System
 
         public void PutAndCheckOver(int row, int col)
         {
+            if (!cellMatrix.IsCellEmpty(row, col)) return; // cell không trống thì mới điền
             var move = cellMatrix.SetCell(row, col, current, true);
             RaiseChanged(move);
-            if (move.Value == null)
+            if (move.Value == null) // nếu đã Win thì Value khác null
             {
                 SwitchPlayer();
+            }
+            else
+            {
+                RaiseGameOver(move);
+                Player.Icon = '\0';
             }
         }
 
@@ -60,7 +67,8 @@ namespace System
         }
 
         protected void RaiseChanged(Document doc) => Changed?.Invoke(doc);
-        protected void RaiseGameOver(Document doc) => GameOver?.Invoke(this, new GameEventArg { Document = doc });
+        protected void RaiseGameOver(Document doc) => GameOver?.Invoke(doc);
+        //protected void RaiseGameOver(Document doc) => GameOver?.Invoke(this, new GameEventArg { Document = doc });
         protected virtual void SwitchPlayer()
         {
 

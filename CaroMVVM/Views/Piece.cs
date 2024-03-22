@@ -30,7 +30,7 @@ namespace System
             {
                 Width = sz,
                 Height = sz,
-                Stroke = Brushes.Yellow,
+                Stroke = Brushes.Red,
                 StrokeThickness = 2,
                 Margin = new Thickness(2),
             });
@@ -63,7 +63,8 @@ namespace System
 
         public void Put(char icon)
         {
-            if (icon == 'o') DrawO(); else DrawX();
+            if (icon == 'o') DrawO();
+            else if (icon == 'x') DrawX();
         }
 
         public Piece(Game game, int r, int c)
