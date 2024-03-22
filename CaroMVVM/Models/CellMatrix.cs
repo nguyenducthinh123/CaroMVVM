@@ -31,7 +31,7 @@ namespace System
         {
             Row = row;
             Column = col;
-            cells[row, col] = Icon = player.Icon;
+            cells[row, col] = Icon = player.Icon; // Không nên dùng cells[Row, Column] vì nó phải ép Row, Column từ obj về int mỗi lần dùng
 
             if (check) 
             {

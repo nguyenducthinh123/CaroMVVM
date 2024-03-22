@@ -71,15 +71,19 @@ namespace CaroMVVM.Views
                     p.Background = Brushes.Gray;
                 }
 
-                doc.Icon -= ' ';
-                MessageBox.Show(doc.Icon + " Win");
+                if (doc.Icon != '\0')
+                {
+                    doc.Icon -= ' ';
+                    MessageBox.Show(doc.Icon + " Win");
+                }
+                
             };
 
             PreviewMouseLeftButtonUp += (s, e) => {
                 var p = e.GetPosition(grid);
                 int r = (int)(p.Y / cell_size);
                 int c = (int)(p.X / cell_size);
-                game.PutAndCheckOver(r, c);
+                game.PutAndCheckOver(r, c); // Thằng này gọi sự kiện Changed
             };
 
             // Mình để Start trong hàm khởi tạo luôn rồi
