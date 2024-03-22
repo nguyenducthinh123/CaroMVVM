@@ -17,7 +17,7 @@ namespace System
         Player current;
         CellMatrix cellMatrix;
 
-        public event EventHandler<GameEventArg> Changed;
+        public event Action<Document> Changed;
         public event EventHandler<GameEventArg> GameOver;
 
         public Player Player
@@ -44,30 +44,26 @@ namespace System
 
         public void PutAndCheckOver(int row, int col)
         {
-            cellMatrix.SetCell(row, col, current);
-            RaiseChanged(cellMatrix);
-
-            if (cellMatrix.IsWin(current, row, col))
+            var move = cellMatrix.SetCell(row, col, current, true);
+            RaiseChanged(move);
+            if (move.Value == null)
             {
-                RaiseGameOver(cellMatrix);
-                return;
+                SwitchPlayer();
             }
-
-            SwitchPlayer();
         }
 
-        public void PutFirsrPlayer()
+        public void PutFirstPlayer()
         {
             cellMatrix.SetCenter(current);
             RaiseChanged(cellMatrix);
             SwitchPlayer();
         }
 
-        protected void RaiseChanged(Document Doc) => Changed?.Invoke(this, new GameEventArg { Document = Doc});
-        protected void RaiseGameOver(Document Doc) => GameOver?.Invoke(this, new GameEventArg { Document= Doc });
+        protected void RaiseChanged(Document doc) => Changed?.Invoke(doc);
+        protected void RaiseGameOver(Document doc) => GameOver?.Invoke(this, new GameEventArg { Document = doc });
         protected virtual void SwitchPlayer()
         {
-            
+
         }
     }
 }

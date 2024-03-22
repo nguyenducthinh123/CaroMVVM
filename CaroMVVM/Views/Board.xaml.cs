@@ -31,6 +31,7 @@ namespace CaroMVVM.Views
             var game = new SinglePlayer();
             int sz = ViewModelBase.Setting.CellSize;
             game.Start();
+
             int w = game.Size * sz;
             var grid = new Grid()
             {
@@ -56,10 +57,23 @@ namespace CaroMVVM.Views
                 }
             }
 
-            game.PutFirsrPlayer();
+            game.Changed += (doc) => {
+                int index = doc.Row * game.Size + doc.Column;
+                var cell = grid.Children[index] as Piece;
+                cell.Put(doc.Icon);
+            };
 
-            game.GameOver += (s, e) =>
-            {
+            PreviewMouseLeftButtonUp += (s, e) => {
+                var p = e.GetPosition(grid);
+                int r = (int)(p.Y / sz);
+                int c = (int)(p.X / sz);
+                game.PutAndCheckOver(r, c);
+            };
+
+            // để game xử lí
+            //game.PutFirsrPlayer();
+
+            game.GameOver += (s, e) => {
                 var ts = new Thread(new ThreadStart(() =>
                 {
                     MessageBox.Show(e.Document.Icon.ToString().ToUpper() + " Win");

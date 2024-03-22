@@ -30,16 +30,16 @@ namespace System
             }
         }
 
-        static Client client;
-        public static Client Client
+        static Broker broker;
+        static public Broker Broker
         {
             get
             {
-                if (client == null)
+                if (broker == null)
                 {
-                    client = new Client("broker.emqx.io");
+                    broker = new Broker();
                 }
-                return client;
+                return broker;
             }
         }
 

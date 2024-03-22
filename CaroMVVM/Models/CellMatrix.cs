@@ -26,12 +26,20 @@ namespace System
             return (cells[row, col] == '\0');
         }
 
-        public Document SetCell(int row, int col, Player player) // khả năng phục vụ cho đánh online
+        public Document SetCell(int row, int col, Player player, bool check) // khả năng phục vụ cho đánh online
         {
             Row = row;
             Column = col;
-            Icon = player.Icon;
-            cells[Row, Column] = Icon;
+            cells[row, col] = Icon = player.Icon;
+
+            if (check) 
+            {
+                Func<int, int, bool> over = (dr, dc) => Calculate(dr, dc, true) >= 4;
+                if (over(0, 1) || over(1, 0) || over(1, 1) || over(-1, 1))
+                {
+                    Value = player;
+                }
+            }
 
             return this;
         }
@@ -39,29 +47,23 @@ namespace System
         public Document SetCenter(Player player)
         {
             int sz = ViewModelBase.Setting.Size;
-            return SetCell(sz >> 1, sz >> 1, player);
+            return SetCell(sz >> 1, sz >> 1, player, false);
         }
 
-        public int Calculate(Player player, int row, int col, int dr, int dc, bool invert)
+        public int Calculate(int dr, int dc, bool invert)
         {
-            int r = row + dr;
-            int c = col + dc;
+            int r = Row + dr;
+            int c = Column + dc;
             int s = 0;
             int sz = ViewModelBase.Setting.Size;
-            while (r >= 0 && r < sz && c >= 0 && c < sz && cells[r, c] == player.Icon)
+            while (r >= 0 && r < sz && c >= 0 && c < sz && cells[r, c] == Icon)
             {
                 ++s;
                 r += dr;
                 c += dc;
             }
-            if (invert) s += Calculate(player, row, col, -dr, -dc, false); // cộng với invert
+            if (invert) s += Calculate(-dr, -dc, false); // cộng với invert
             return s;
-        }
-
-        public bool IsWin(Player player, int row, int col)
-        {
-            Func<int, int, bool> over = (dr, dc) => Calculate(player, row, col, dr, dc, true) >= 4;
-            return over(0, 1) || over(1, 0) || over(1, 1) || over(-1, 1);
         }
     }
 }

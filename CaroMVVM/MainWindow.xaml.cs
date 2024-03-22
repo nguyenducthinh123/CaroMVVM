@@ -68,6 +68,10 @@ namespace CaroMVVM
             Render(new Board(), new SinglePlayer());
         }
 
+        public void ShowCreateGame()
+        {
+            Render(new Queue(), new ProactiveGame());
+        }
 
     }
 }

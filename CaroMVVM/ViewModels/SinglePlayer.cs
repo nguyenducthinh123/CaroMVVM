@@ -13,6 +13,7 @@ namespace System
             base.Start();
             Player.Rival = new Player();
             Player.Rival.Icon = 'o';
+            PutFirstPlayer();
         }
 
         protected override void SwitchPlayer()

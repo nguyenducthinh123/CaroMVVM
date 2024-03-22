@@ -17,7 +17,6 @@ namespace System
             get => (int)GetValue(Grid.RowProperty);
             set => SetValue(Grid.RowProperty, value);
         }
-
         public int Column
         {
             get => (int)GetValue(Grid.ColumnProperty);
@@ -25,8 +24,7 @@ namespace System
         }
         public bool IsEmpty => Children.Count == 0;
         public void Clear() => Children.Clear();
-        public void DrawO()
-        {
+        public void DrawO() {
             double sz = this.ActualWidth - 4;
             Children.Add(new Ellipse
             {
@@ -63,9 +61,9 @@ namespace System
             });
         }
 
-        public void Put(Player player)
+        public void Put(char icon)
         {
-            if (player.Icon == 'o') DrawO(); else DrawX();
+            if (icon == 'o') DrawO(); else DrawX();
         }
 
         public Piece(Game game, int r, int c)
@@ -75,27 +73,27 @@ namespace System
             Background = Brushes.Black;
             Margin = new Thickness(0.5);
 
-            game.Changed += (s, e) => {
-                // do có rất nhiều canvas nhận sự kiện này nên phải xử lý như bên dòng dưới
-                if (e.Document.Row != r || e.Document.Column != c) return;
+            //game.Changed += (s, e) => {
+            //    // do có rất nhiều canvas nhận sự kiện này nên phải xử lý như bên dòng dưới
+            //    if (e.Document.Row != r || e.Document.Column != c) return;
 
-                switch (e.Document.Icon)
-                {
-                    case '\0': Clear(); break;
-                    case 'o': DrawO(); break;
-                    case 'x': DrawX(); break;
-                }
-            };
-            game.GameOver += (s, e) => {
-                Background = Brushes.Gray;
-                IsEnabled = false;
-            };
+            //    switch (e.Document.Icon)
+            //    {
+            //        case '\0': Clear(); break;
+            //        case 'o': DrawO(); break;
+            //        case 'x': DrawX(); break;
+            //    }
+            //};
+            //game.GameOver += (s, e) => {
+            //    Background = Brushes.Gray;
+            //    IsEnabled = false;
+            //};
 
-            PreviewMouseLeftButtonUp += (s, e) => {
-                // có rồi thì không nhét nữa
-                if (Children.Count > 0) return;
-                game.PutAndCheckOver(r, c);
-            };
+            //PreviewMouseLeftButtonUp += (s, e) => {
+            //    // có rồi thì không nhét nữa
+            //    if (Children.Count > 0) return;
+            //    game.PutAndCheckOver(r, c);
+            //};
         }
 
     }

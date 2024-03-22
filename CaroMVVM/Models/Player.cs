@@ -16,6 +16,6 @@ namespace System
             Icon = 'x';
         }
 
-        //public string GetTopic(string);
+        public string GetTopic(string prefix) => $"{prefix}/{ObjectId}";
     }
 }

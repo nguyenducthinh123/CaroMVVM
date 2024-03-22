@@ -299,7 +299,7 @@ namespace MQTT
             Subscribe(topic, 0);
         }
 
-        public void Unsubsribe(string topic)
+        public void Unsubscribe(string topic)
         {
             Task.Run(() => Send(Packet.Unsubcribe(topic)));
         }
