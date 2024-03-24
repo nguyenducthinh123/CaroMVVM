@@ -16,11 +16,6 @@ namespace System
             PutFirstPlayer();
         }
 
-        public SinglePlayer()
-        {
-            Start();
-        }
-
         protected override void SwitchPlayer()
         {
             var temp = Player;

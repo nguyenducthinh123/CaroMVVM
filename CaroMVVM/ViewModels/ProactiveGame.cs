@@ -9,6 +9,9 @@ namespace System
 {
     public class ProactiveGame : Game
     {
-        
+        public void Connect()
+        {
+            Broker.Connect();
+        }
     }
 }

@@ -86,6 +86,8 @@ namespace CaroMVVM.Views
                 game.PutAndCheckOver(r, c); // Thằng này gọi sự kiện Changed
             };
 
+            game.Start();
+
             // Mình để Start trong hàm khởi tạo luôn rồi
             //game.Start();
 
