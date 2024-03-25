@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace CaroMVVM.Views
 {
     /// <summary>
-    /// Interaction logic for Board.xaml
+    /// Interaction logic for OnlineBoard.xaml
     /// </summary>
-    public partial class Board : UserControl
+    public partial class OnlineBoard : UserControl
     {
-        public Board()
+        public OnlineBoard()
         {
             InitializeComponent();
             CreateBoard();
@@ -38,7 +38,7 @@ namespace CaroMVVM.Views
                 Width = w,
                 Height = w,
             }; //add new grid into the border
-            board.Child = grid;
+            onl_board.Child = grid;
 
             // Vẽ hàng và cột
             for (int i = 0; i < size; i++)
@@ -56,48 +56,6 @@ namespace CaroMVVM.Views
                 }
             }
 
-            var game = new SinglePlayer();
-
-            Game.Changed += (doc) => {
-                int index = doc.Row * size + doc.Column;
-                var cell = grid.Children[index] as Piece;
-                cell.Put(doc.Icon);
-            };
-
-            Game.GameOver += (doc) =>
-            {
-                foreach(Piece p in grid.Children)
-                {
-                    p.Background = Brushes.Gray;
-                }
-
-                if (doc.Icon != '\0')
-                {
-                    doc.Icon -= ' ';
-                    MessageBox.Show(doc.Icon + " Win");
-                }
-                
-            };
-
-            PreviewMouseLeftButtonUp += (s, e) => {
-                var p = e.GetPosition(grid);
-                int r = (int)(p.Y / cell_size);
-                int c = (int)(p.X / cell_size);
-                game.PutAndCheckOver(r, c); // Thằng này gọi sự kiện Changed
-            };
-
-            game.Start();
-
-            // để game xử lí
-            //game.PutFirsrPlayer();
-
-            //game.GameOver += (s, e) => {
-            //    var ts = new Thread(new ThreadStart(() =>
-            //    {
-            //        MessageBox.Show(e.Document.Icon.ToString().ToUpper() + " Win");
-            //    }));
-            //    ts.Start();
-            //};
         }
     }
 }

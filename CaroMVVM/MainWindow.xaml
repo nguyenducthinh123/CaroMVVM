@@ -8,8 +8,8 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
             <RowDefinition Height="20"/>
+            <RowDefinition Height="30"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
@@ -23,7 +23,7 @@
         </Menu>
 
         <Border Grid.Row="1" Name="Banner">
-            <Label Content="{Binding Path=Caption}" />
+            <Label Content="{Binding Path=Caption}" Foreground="Green"/>
         </Border>
         <Border x:Name="MainContent" Grid.Row="2" Background="WhiteSmoke">
             

@@ -16,6 +16,7 @@ namespace System
         }
 
         public event Action CaptionChanged;
+        public event Action MainContentChanged;
 
         static Setting setting;
         static public Setting Setting

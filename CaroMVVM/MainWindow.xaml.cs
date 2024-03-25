@@ -11,7 +11,7 @@ using System.Windows.Shapes;
 
 namespace CaroMVVM
 {
-
+    using System.Reflection;
     using ViewModels;
     using Views;
 
@@ -45,8 +45,33 @@ namespace CaroMVVM
             if (vm != null)
             {
                 vm.CaptionChanged += () => {
-                    Banner.DataContext = null;
-                    Banner.DataContext = vm;
+                    Dispatcher.InvokeAsync(() =>
+                    {
+                        Banner.DataContext = null;
+                        Banner.DataContext = vm;
+                    });
+                };
+            }
+
+            var pro_game = viewModel as ProactiveGame;
+            if (pro_game != null)
+            {
+                pro_game.Success += (doc) =>
+                {
+                    Thread.Sleep(1000);
+                    Dispatcher.InvokeAsync(() =>
+                    {
+                        MainContent.Child = new ListPlayer();
+                    });
+                };
+
+                // phải để static không lúc new ListPlayer() nó xóa sự kiện ReadyPlay mất
+                pro_game.ReadyPlay += (doc) =>
+                {
+                    Dispatcher.InvokeAsync(() =>
+                    {
+                        MainContent.Child = new OnlineBoard();
+                    });
                 };
             }
         }
@@ -65,7 +90,12 @@ namespace CaroMVVM
 
         public void ShowSinglePlayer()
         {
-            Render(new Board(), new SinglePlayer());
+            Render(new Board(), new SinglePlayer()); // tạo SinglePlayer 2 lần nhưng không bị lỗi :)))
+        }
+
+        public void ShowCreateGame()
+        {
+            Render(new Grid(), ProactiveGame.Game);
         }
 
     }
