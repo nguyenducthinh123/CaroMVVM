@@ -53,26 +53,54 @@ namespace CaroMVVM
                 };
             }
 
-            var pro_game = viewModel as ProactiveGame;
-            if (pro_game != null)
+            if (Game.Flag)
             {
-                pro_game.Success += (doc) =>
-                {
-                    Thread.Sleep(1000);
-                    Dispatcher.InvokeAsync(() =>
-                    {
-                        MainContent.Child = new ListPlayer();
-                    });
-                };
+                var pro_game = viewModel as ProactiveGame;
 
-                // phải để static không lúc new ListPlayer() nó xóa sự kiện ReadyPlay mất
-                pro_game.ReadyPlay += (doc) =>
+                if (pro_game != null)
                 {
-                    Dispatcher.InvokeAsync(() =>
+                    pro_game.Success += (doc) =>
                     {
-                        MainContent.Child = new OnlineBoard();
-                    });
-                };
+                        Thread.Sleep(1000);
+                        Dispatcher.InvokeAsync(() =>
+                        {
+                            MainContent.Child = new ListPlayer();
+                        });
+                    };
+
+                    pro_game.ReadyPlay += (doc) =>
+                    {
+                        Dispatcher.InvokeAsync(() =>
+                        {
+                            Thread.Sleep(500); // đợi 1 chút cho thằng passive game nó bật bàn cờ
+                            MainContent.Child = new OnlineBoard();
+                        });
+                    };
+                }
+            }
+            else
+            {
+                var passive_game = viewModel as PassiveGame;
+
+                if (passive_game != null)
+                {
+                    passive_game.Success += (doc) =>
+                    {
+                        Thread.Sleep(1000);
+                        Dispatcher.InvokeAsync(() =>
+                        {
+                            MainContent.Child = new ListPlayer();
+                        });
+                    };
+
+                    passive_game.ReadyCallback += (doc) =>
+                    {
+                        Dispatcher.InvokeAsync(() =>
+                        {
+                            MainContent.Child = new OnlineBoard();
+                        });
+                    };
+                }
             }
         }
         public MainWindow()
@@ -90,12 +118,17 @@ namespace CaroMVVM
 
         public void ShowSinglePlayer()
         {
-            Render(new SinglePlayer(), new Board()); // Đã fix khởi tạo game 2 lần
+            Render(new SinglePlayer(), new Board()); // Khởi tạo 2 lần nhưng vẫn ok do đã xử lý
         }
 
         public void ShowCreateGame()
         {
             Render(ProactiveGame.Game, new Grid()); // Đã fix khởi tạo game 2 lần
+        }
+
+        public void ShowFindGame()
+        {
+            Render(PassiveGame.Game, new Grid()); // Đã fix khởi tạo 2 lần
         }
 
     }

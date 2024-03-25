@@ -21,6 +21,8 @@ namespace System
         public event Action<Document> GameOver;
         //public event EventHandler<GameEventArg> GameOver;
 
+        public static bool Flag { get; set; } = true;
+
         public Player Player
         {
             get

@@ -64,12 +64,13 @@ namespace System
             });
         }
 
-        public void SendReady()
+        public void SendReady(string id)
         {
             send_flag = false;
             ObjectId = Broker.ID;
             Name = "Debug";
-            Broker.Send("ready", this);
+            string topic = "ready/" + id;
+            Broker.Send(topic, this);
 
             Caption = "Playing Proactive Game";
             ReadyPlay?.Invoke(this);

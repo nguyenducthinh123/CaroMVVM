@@ -28,28 +28,56 @@ namespace CaroMVVM.Views
 
         public void AddPlayer()
         {
-            var game = ProactiveGame.Game;
-            game.Start();
-            Dictionary<string, bool> itemName = new Dictionary<string, bool>();
-            game.JoinCallback += (doc) =>
+            if (Game.Flag)
             {
-                Dispatcher.InvokeAsync(() =>
+                var game = ProactiveGame.Game;
+                game.Start();
+                Dictionary<string, bool> itemName = new Dictionary<string, bool>();
+                game.JoinCallback += (doc) =>
                 {
-                    ListViewItem lstItem = new ListViewItem();
-                    var name = doc.Name;
-                    if (!itemName.ContainsKey(name))
+                    Dispatcher.InvokeAsync(() =>
                     {
-                        itemName[name] = true;
-
-                        lstItem.Content = name;
-                        lstItem.MouseLeftButtonUp += (s, e) =>
+                        ListViewItem lstItem = new ListViewItem();
+                        var name = doc.Name;
+                        if (!itemName.ContainsKey(name))
                         {
-                            game.SendReady();
-                        };
-                        lstPlayer.Items.Add(lstItem);
-                    }
-                });
-            };
+                            itemName[name] = true;
+                            var id = doc.ObjectId;
+
+                            lstItem.Content = name;
+                            lstItem.MouseLeftButtonUp += (s, e) =>
+                            {
+                                game.SendReady(id);
+                            };
+                            lstPlayer.Items.Add(lstItem);
+                        }
+                    });
+                };
+            }
+            else
+            {
+                var game = PassiveGame.Game;
+                game.Start();
+                Dictionary<string, bool> itemName = new Dictionary<string, bool>();
+                game.FoundCallback += (doc) => {
+                    Dispatcher.InvokeAsync(() =>
+                    {
+                        ListViewItem lstItem = new ListViewItem();
+                        var name = doc.Name;
+                        if (!itemName.ContainsKey(name))
+                        {
+                            itemName[name] = true;
+
+                            lstItem.Content = name;
+                            lstItem.MouseLeftButtonUp += (s, e) =>
+                            {
+                                game.SendJoin();
+                            };
+                            lstPlayer.Items.Add(lstItem);
+                        }
+                    });
+                };
+            }
         }
     }
 }
