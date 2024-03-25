@@ -90,7 +90,7 @@ namespace CaroMVVM
 
         public void ShowSinglePlayer()
         {
-            Render(new Board(), new SinglePlayer()); // tạo SinglePlayer 2 lần nhưng không bị lỗi :)))
+            Render(new Board(), SinglePlayer.Game); // Đã fix khởi tạo game 2 lần
         }
 
         public void ShowCreateGame()

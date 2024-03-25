@@ -17,8 +17,8 @@ namespace System
         Player current;
         CellMatrix cellMatrix;
 
-        public static event Action<Document> Changed;
-        public static event Action<Document> GameOver;
+        public event Action<Document> Changed;
+        public event Action<Document> GameOver;
         //public event EventHandler<GameEventArg> GameOver;
 
         public Player Player

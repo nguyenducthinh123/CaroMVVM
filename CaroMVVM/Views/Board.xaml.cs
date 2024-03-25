@@ -56,15 +56,15 @@ namespace CaroMVVM.Views
                 }
             }
 
-            var game = new SinglePlayer();
+            var game = SinglePlayer.Game;
 
-            Game.Changed += (doc) => {
+            game.Changed += (doc) => {
                 int index = doc.Row * size + doc.Column;
                 var cell = grid.Children[index] as Piece;
                 cell.Put(doc.Icon);
             };
 
-            Game.GameOver += (doc) =>
+            game.GameOver += (doc) =>
             {
                 foreach(Piece p in grid.Children)
                 {
