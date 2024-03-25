@@ -56,7 +56,7 @@ namespace CaroMVVM.Views
                 }
             }
 
-            var game = SinglePlayer.Game;
+            var game = new SinglePlayer();
 
             game.Changed += (doc) => {
                 int index = doc.Row * size + doc.Column;

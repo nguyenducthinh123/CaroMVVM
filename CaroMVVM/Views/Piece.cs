@@ -26,6 +26,8 @@ namespace System
         public void Clear() => Children.Clear();
         public void DrawO() {
             double sz = this.ActualWidth - 4;
+
+            if (sz < 0) sz = ViewModelBase.Setting.CellSize - 5;
             Children.Add(new Ellipse
             {
                 Width = sz,

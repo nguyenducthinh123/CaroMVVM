@@ -36,7 +36,7 @@ namespace CaroMVVM
             }
         }
 
-        void Render(UIElement view, object viewModel)
+        void Render(object viewModel, UIElement view)
         {
             DataContext = viewModel;
             MainContent.Child = view;
@@ -85,17 +85,17 @@ namespace CaroMVVM
 
         public void ShowSetting()
         {
-            Render(new SettingView(), new SettingViewModel());
+            Render(new SettingViewModel(), new SettingView());
         }
 
         public void ShowSinglePlayer()
         {
-            Render(new Board(), SinglePlayer.Game); // Đã fix khởi tạo game 2 lần
+            Render(new SinglePlayer(), new Board()); // Đã fix khởi tạo game 2 lần
         }
 
         public void ShowCreateGame()
         {
-            Render(new Grid(), ProactiveGame.Game);
+            Render(ProactiveGame.Game, new Grid()); // Đã fix khởi tạo game 2 lần
         }
 
     }

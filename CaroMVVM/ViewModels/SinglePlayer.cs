@@ -16,18 +16,18 @@ namespace System
             PutFirstPlayer();
         }
 
-        static SinglePlayer game;
-        public static SinglePlayer Game
-        {
-            get
-            {
-                if (game == null)
-                {
-                    game = new SinglePlayer();
-                }
-                return game;
-            }
-        }
+        //static SinglePlayer game;
+        //public static SinglePlayer Game
+        //{
+        //    get
+        //    {
+        //        if (game == null)
+        //        {
+        //            game = new SinglePlayer();
+        //        }
+        //        return game;
+        //    }
+        //}
 
         protected override void SwitchPlayer()
         {

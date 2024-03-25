@@ -56,6 +56,8 @@ namespace CaroMVVM.Views
                 }
             }
 
+            var game = ProactiveGame.Game;
+
         }
     }
 }
