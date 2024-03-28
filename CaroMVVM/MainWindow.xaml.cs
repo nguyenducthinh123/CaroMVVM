@@ -72,8 +72,9 @@ namespace CaroMVVM
                     {
                         Dispatcher.InvokeAsync(() =>
                         {
-                            Thread.Sleep(500); // đợi 1 chút cho thằng passive game nó bật bàn cờ
                             MainContent.Child = new OnlineBoard();
+                            Thread.Sleep(100);
+                            pro_game.PlayProactiveGame(ProactiveGame.rival_id);
                         });
                     };
                 }
@@ -98,6 +99,7 @@ namespace CaroMVVM
                         Dispatcher.InvokeAsync(() =>
                         {
                             MainContent.Child = new OnlineBoard();
+                            passive_game.PlayPassiveGame(PassiveGame.rival_id);
                         });
                     };
                 }

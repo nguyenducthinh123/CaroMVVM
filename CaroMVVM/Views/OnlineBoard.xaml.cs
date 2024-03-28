@@ -56,8 +56,93 @@ namespace CaroMVVM.Views
                 }
             }
 
-            var game = ProactiveGame.Game;
+            if (Game.Flag)
+            {
+                var game = ProactiveGame.Game;
 
+                game.Changed += (doc) => 
+                {
+                    Dispatcher.InvokeAsync(() =>
+                    {
+                        int index = doc.Row * size + doc.Column;
+                        var cell = grid.Children[index] as Piece;
+                        cell.Put(doc.Icon);
+                    });
+                    game.SendMove(doc.Row, doc.Column, doc.Value != null);
+                };
+
+                game.GameOver += (doc) =>
+                {
+                    Dispatcher.InvokeAsync(() =>
+                    {
+                        foreach (Piece piece in grid.Children)
+                        {
+                            piece.Background = Brushes.Gray;
+                        }
+
+                        if (doc.Icon != '\0')
+                        {
+                            doc.Icon -= ' ';
+                            MessageBox.Show(doc.Icon + " Win");
+                        }
+                    });
+                   
+                };
+
+                PreviewMouseLeftButtonUp += (s, e) =>
+                {
+                    if (!game.my_turn) return;
+                    var p = e.GetPosition(grid);
+                    int r = (int)(p.Y / cell_size);
+                    int c = (int)(p.X / cell_size);
+
+                    game.PutAndCheckOver(r, c);
+                };
+            }
+            else
+            {
+                var game = PassiveGame.Game;
+
+                game.Changed += (doc) =>
+                {
+                    Dispatcher.InvokeAsync(() =>
+                    {
+                        int index = doc.Row * size + doc.Column;
+                        var cell = grid.Children[index] as Piece;
+                        cell.Put(doc.Icon);
+                    });
+                    
+                    game.SendMove(doc.Row, doc.Column, doc.Value != null); // Value khác null là win, tức là IsWin = true
+                };
+
+                game.GameOver += (doc) =>
+                {
+                    Dispatcher.InvokeAsync(() =>
+                    {
+                        foreach (Piece piece in grid.Children)
+                        {
+                            piece.Background = Brushes.Gray;
+                        }
+
+                        if (doc.Icon != '\0')
+                        {
+                            doc.Icon -= ' ';
+                            MessageBox.Show(doc.Icon + " Win");
+                        }
+                    });
+                   
+                };
+
+                PreviewMouseLeftButtonUp += (s, e) =>
+                {
+                    if (!game.my_turn) return;
+                    var p = e.GetPosition(grid);
+                    int r = (int)(p.Y / cell_size);
+                    int c = (int)(p.X / cell_size);
+
+                    game.PutAndCheckOver(r, c);
+                };
+            }
         }
     }
 }

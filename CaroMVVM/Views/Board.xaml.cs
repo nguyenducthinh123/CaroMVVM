@@ -58,7 +58,8 @@ namespace CaroMVVM.Views
 
             var game = new SinglePlayer();
 
-            game.Changed += (doc) => {
+            game.Changed += (doc) => 
+            {
                 int index = doc.Row * size + doc.Column;
                 var cell = grid.Children[index] as Piece;
                 cell.Put(doc.Icon);

@@ -67,11 +67,12 @@ namespace CaroMVVM.Views
                         if (!itemName.ContainsKey(name))
                         {
                             itemName[name] = true;
+                            var id = doc.ObjectId;
 
                             lstItem.Content = name;
                             lstItem.MouseLeftButtonUp += (s, e) =>
                             {
-                                game.SendJoin();
+                                game.SendJoin(id);
                             };
                             lstPlayer.Items.Add(lstItem);
                         }

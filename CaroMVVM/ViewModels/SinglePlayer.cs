@@ -11,8 +11,8 @@ namespace System
         public override void Start()
         {
             base.Start();
-            Player.Rival = new Player();
-            Player.Rival.Icon = 'o';
+            Player.Rival = new Player { Icon = 'o'}; // C# mới có kiểu khởi tạo thế này
+            //Player.Rival.Icon = 'o';
             PutFirstPlayer();
         }
 
