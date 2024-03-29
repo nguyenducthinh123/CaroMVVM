@@ -4,14 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CaroMVVM.ViewModels
+namespace System
 {
     internal class SettingViewModel : ViewModelBase
     {
-        public SettingViewModel() { Copy(Setting); }
+        public override object GetBindingData()
+        {
+            return Copy(Setting);
+        }
+
         public override void Start()
         {
         }
+
         public override void Dispose()
         {
             Move(Setting);

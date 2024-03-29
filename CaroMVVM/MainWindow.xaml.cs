@@ -12,7 +12,6 @@ using System.Windows.Shapes;
 namespace CaroMVVM
 {
     using System.Reflection;
-    using ViewModels;
     using Views;
 
     /// <summary>
@@ -21,6 +20,9 @@ namespace CaroMVVM
     /// 
     public partial class MainWindow : Window
     {
+        public static event Action<ViewModelBase> dataContextChanged;
+        public void RaiseDataContextChanged(ViewModelBase vm) => dataContextChanged?.Invoke(vm);
+
         void ApplyMenu(ItemCollection items)
         {
             foreach (MenuItem item in items)
@@ -38,20 +40,20 @@ namespace CaroMVVM
 
         void Render(object viewModel, UIElement view)
         {
-            DataContext = viewModel;
+            var vm = viewModel as ViewModelBase;
+            if (vm == null) return;
+
+            DataContext = vm.GetBindingData();
+            RaiseDataContextChanged(vm);
             MainContent.Child = view;
 
-            var vm = viewModel as ViewModelBase;
-            if (vm != null)
-            {
-                vm.CaptionChanged += () => {
-                    Dispatcher.InvokeAsync(() =>
-                    {
-                        Banner.DataContext = null;
-                        Banner.DataContext = vm;
-                    });
-                };
-            }
+            vm.CaptionChanged += () => {
+                Dispatcher.InvokeAsync(() =>
+                {
+                    Banner.DataContext = null;
+                    Banner.DataContext = vm;
+                });
+            };
 
             if (Game.Flag)
             {

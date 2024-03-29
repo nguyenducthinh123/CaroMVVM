@@ -25,8 +25,14 @@ namespace CaroMVVM.Views
             InitializeComponent();
             btnSave.Click += (s, e) =>
             {
-                ((ViewModels.SettingViewModel)DataContext).Save();
+                ((SettingViewModel)DataContext).Save();
             };
+
+            var vm = (SettingViewModel)DataContext;
+            MainWindow.dataContextChanged += (vm) =>
+            {
+                vm.Start();
+            }; 
         }
     }
 }
