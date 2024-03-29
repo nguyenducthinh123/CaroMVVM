@@ -73,7 +73,6 @@ namespace CaroMVVM
                         Dispatcher.InvokeAsync(() =>
                         {
                             MainContent.Child = new OnlineBoard();
-                            Thread.Sleep(100);
                             pro_game.PlayProactiveGame(ProactiveGame.rival_id);
                         });
                     };
