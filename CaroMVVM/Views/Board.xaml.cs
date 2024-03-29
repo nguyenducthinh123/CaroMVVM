@@ -23,13 +23,20 @@ namespace CaroMVVM.Views
         public Board()
         {
             InitializeComponent();
-            CreateBoard();
+            MainWindow.dataContextChanged += (vm) =>
+            {
+                var game = vm as SinglePlayer;
+                if (game == null) return;
+                CreateBoard(game);
+                game.Start();
+            };
+
         }
 
-        public void CreateBoard()
+        public void CreateBoard(SinglePlayer game)
         {
-            int cell_size = ViewModelBase.Setting.CellSize;
-            int size = ViewModelBase.Setting.Size;
+            int size = game.Size;
+            int cell_size = game.CellSize;
 
             int w = size * cell_size;
             var grid = new Grid()
@@ -56,9 +63,7 @@ namespace CaroMVVM.Views
                 }
             }
 
-            var game = new SinglePlayer();
-
-            game.Changed += (doc) => 
+            game.Changed += (doc) =>
             {
                 int index = doc.Row * size + doc.Column;
                 var cell = grid.Children[index] as Piece;
@@ -67,17 +72,21 @@ namespace CaroMVVM.Views
 
             game.GameOver += (doc) =>
             {
-                foreach(Piece p in grid.Children)
+                foreach (Piece p in grid.Children)
                 {
                     p.Background = Brushes.Gray;
                 }
 
-                if (doc.Icon != '\0')
-                {
-                    doc.Icon -= ' ';
-                    MessageBox.Show(doc.Icon + " Win");
-                }
+                Task.Run(() => {
+                    if (doc.Icon == 'x' || doc.Icon == 'o')
+                    {
+                        doc.Icon -= ' ';
+                        MessageBox.Show(doc.Icon + " Win");
+
+                    }
+                });
                 
+
             };
 
             PreviewMouseLeftButtonUp += (s, e) => {
@@ -87,18 +96,6 @@ namespace CaroMVVM.Views
                 game.PutAndCheckOver(r, c); // Thằng này gọi sự kiện Changed
             };
 
-            game.Start();
-
-            // để game xử lí
-            //game.PutFirsrPlayer();
-
-            //game.GameOver += (s, e) => {
-            //    var ts = new Thread(new ThreadStart(() =>
-            //    {
-            //        MessageBox.Show(e.Document.Icon.ToString().ToUpper() + " Win");
-            //    }));
-            //    ts.Start();
-            //};
         }
     }
 }

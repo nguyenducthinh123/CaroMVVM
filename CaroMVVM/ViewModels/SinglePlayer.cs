@@ -8,12 +8,23 @@ namespace System
 {
     public class SinglePlayer : Game
     {
+        public override object GetBindingData()
+        {
+            return Copy(Setting);
+        }
+
         public override void Start()
         {
             base.Start();
+            Caption = "Play Single Game !!!";
             Player.Rival = new Player { Icon = 'o'}; // C# mới có kiểu khởi tạo thế này
             //Player.Rival.Icon = 'o';
             PutFirstPlayer();
+        }
+
+        public override void Dispose()
+        {
+            Move(Setting);
         }
 
         //static SinglePlayer game;

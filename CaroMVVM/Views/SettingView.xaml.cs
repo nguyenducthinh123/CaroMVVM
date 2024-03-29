@@ -23,16 +23,20 @@ namespace CaroMVVM.Views
         public SettingView()
         {
             InitializeComponent();
-            btnSave.Click += (s, e) =>
-            {
-                ((SettingViewModel)DataContext).Save();
-            };
-
-            var vm = (SettingViewModel)DataContext;
             MainWindow.dataContextChanged += (vm) =>
             {
-                vm.Start();
-            }; 
+                var settingVm = vm as SettingViewModel;
+                if (settingVm == null) return;
+
+                btnSave.Click += (s, e) =>
+                {
+                    settingVm.Save();
+                    settingVm.Caption = "Setting Saved !!!";
+                };
+
+                settingVm.Start();
+            };
+            
         }
     }
 }

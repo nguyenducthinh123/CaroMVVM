@@ -15,6 +15,7 @@ namespace System
 
         public override void Start()
         {
+            Caption = "";
         }
 
         public override void Dispose()

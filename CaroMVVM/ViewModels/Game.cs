@@ -41,8 +41,13 @@ namespace System
 
         public override void Start()
         {
-            Size = Setting.Size;
             cellMatrix = new CellMatrix();
+            Player = new Player();
+        }
+
+        public override void Dispose()
+        {
+
         }
 
         public void PutAndCheckOver(int row, int col)

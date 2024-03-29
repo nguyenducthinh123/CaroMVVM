@@ -20,8 +20,8 @@ namespace CaroMVVM
     /// 
     public partial class MainWindow : Window
     {
-        public static event Action<ViewModelBase> dataContextChanged;
-        public void RaiseDataContextChanged(ViewModelBase vm) => dataContextChanged?.Invoke(vm);
+        public static event Action<object> dataContextChanged;
+        public void RaiseDataContextChanged(object vm) => dataContextChanged?.Invoke(vm);
 
         void ApplyMenu(ItemCollection items)
         {
@@ -43,10 +43,6 @@ namespace CaroMVVM
             var vm = viewModel as ViewModelBase;
             if (vm == null) return;
 
-            DataContext = vm.GetBindingData();
-            RaiseDataContextChanged(vm);
-            MainContent.Child = view;
-
             vm.CaptionChanged += () => {
                 Dispatcher.InvokeAsync(() =>
                 {
@@ -54,6 +50,10 @@ namespace CaroMVVM
                     Banner.DataContext = vm;
                 });
             };
+
+            DataContext = vm.GetBindingData();
+            RaiseDataContextChanged(DataContext);
+            MainContent.Child = view;
 
             if (Game.Flag)
             {
