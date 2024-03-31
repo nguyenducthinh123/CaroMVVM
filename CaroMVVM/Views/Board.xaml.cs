@@ -27,42 +27,21 @@ namespace CaroMVVM.Views
             {
                 var game = vm as SinglePlayer;
                 if (game == null) return;
-                CreateBoard(game);
+                Setup(game);
                 game.Start();
             };
 
         }
 
-        public void CreateBoard(SinglePlayer game)
+        public void Setup(object vm)
         {
+            var game = vm as SinglePlayer;
             int size = game.Size;
             int cell_size = game.CellSize;
 
-            int w = size * cell_size;
-            var grid = new Grid()
-            {
-                Background = Brushes.Blue,
-                Width = w,
-                Height = w,
-            }; //add new grid into the border
+            var grid = CreateBoard(size, cell_size);
             board.Child = grid;
-
-            // Vẽ hàng và cột
-            for (int i = 0; i < size; i++)
-            {
-                grid.ColumnDefinitions.Add(new ColumnDefinition());
-                grid.RowDefinitions.Add(new RowDefinition());
-            }
-            // Đặt các quân lên hàng và cột
-            for (int r = 0; r < size; r++)
-            {
-                for (int c = 0; c < size; c++)
-                {
-                    var piece = new Piece(r, c);
-                    grid.Children.Add(piece);
-                }
-            }
-
+                       
             game.Changed += (doc) =>
             {
                 int index = doc.Row * size + doc.Column;
@@ -82,7 +61,6 @@ namespace CaroMVVM.Views
                     {
                         doc.Icon -= ' ';
                         MessageBox.Show(doc.Icon + " Win");
-
                     }
                 });
                 
@@ -97,5 +75,36 @@ namespace CaroMVVM.Views
             };
 
         }
+
+        Grid CreateBoard(int size, int cell_size)
+        {
+            int w = size * cell_size;
+            var grid = new Grid()
+            {
+                Background = Brushes.Blue,
+                Width = w,
+                Height = w,
+            }; //add new grid into the border
+
+            // Vẽ hàng và cột
+            for (int i = 0; i < size; i++)
+            {
+                grid.ColumnDefinitions.Add(new ColumnDefinition());
+                grid.RowDefinitions.Add(new RowDefinition());
+            }
+            // Đặt các quân lên hàng và cột
+            for (int r = 0; r < size; r++)
+            {
+                for (int c = 0; c < size; c++)
+                {
+                    var piece = new Piece(r, c);
+                    grid.Children.Add(piece);
+                }
+            }
+
+            return grid;
+
+        }
+
     }
 }

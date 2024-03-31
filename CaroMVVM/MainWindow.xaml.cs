@@ -11,6 +11,7 @@ using System.Windows.Shapes;
 
 namespace CaroMVVM
 {
+    using System;
     using System.Reflection;
     using Views;
 
@@ -55,56 +56,87 @@ namespace CaroMVVM
             RaiseDataContextChanged(DataContext);
             MainContent.Child = view;
 
-            if (Game.Flag)
+            var gameOnline = viewModel as GameOnline;
+            if (gameOnline == null) return;
+          
+            gameOnline.Success += (doc) =>
             {
-                var pro_game = viewModel as ProactiveGame;
+                Thread.Sleep(1000);
+                Dispatcher.InvokeAsync(() => {
+                    Render(viewModel, new ListPlayer());
+                });
+            };
 
-                if (pro_game != null)
+            if (gameOnline.IsProactive)
+            {
+                gameOnline.ReadyPlay += (doc) =>
                 {
-                    pro_game.Success += (doc) =>
+                    Dispatcher.InvokeAsync(() =>
                     {
-                        Thread.Sleep(1000);
-                        Dispatcher.InvokeAsync(() =>
-                        {
-                            MainContent.Child = new ListPlayer();
-                        });
-                    };
-
-                    pro_game.ReadyPlay += (doc) =>
-                    {
-                        Dispatcher.InvokeAsync(() =>
-                        {
-                            MainContent.Child = new OnlineBoard();
-                            pro_game.PlayProactiveGame(ProactiveGame.rival_id);
-                        });
-                    };
-                }
+                      Render(viewModel, new OnlineBoard());
+                    });
+                };
             }
             else
             {
-                var passive_game = viewModel as PassiveGame;
-
-                if (passive_game != null)
+                gameOnline.ReadyCallback += (doc) =>
                 {
-                    passive_game.Success += (doc) =>
+                    Dispatcher.InvokeAsync(() =>
                     {
-                        Thread.Sleep(1000);
-                        Dispatcher.InvokeAsync(() =>
-                        {
-                            MainContent.Child = new ListPlayer();
-                        });
-                    };
-
-                    passive_game.ReadyCallback += (doc) =>
-                    {
-                        Dispatcher.InvokeAsync(() =>
-                        {
-                            MainContent.Child = new OnlineBoard();
-                            passive_game.PlayPassiveGame(PassiveGame.rival_id);
-                        });
-                    };
-                }
+                        Render(viewModel, new OnlineBoard());
+                    });
+                };
             }
+            //if (Game.Flag)
+            //{
+            //    var pro_game = viewModel as ProactiveGame;
+
+            //    if (pro_game != null)
+            //    {
+            //        pro_game.Success += (doc) =>
+            //        {
+            //            Thread.Sleep(1000);
+            //            Dispatcher.InvokeAsync(() =>
+            //            {
+            //                MainContent.Child = new ListPlayer();
+            //            });
+            //        };
+
+            //        pro_game.ReadyPlay += (doc) =>
+            //        {
+            //            Dispatcher.InvokeAsync(() =>
+            //            {
+            //                MainContent.Child = new OnlineBoard();
+            //                pro_game.PlayProactiveGame(ProactiveGame.rival_id);
+            //            });
+            //        };
+            //    }
+            //}
+            //else
+            //{
+            //    var passive_game = viewModel as PassiveGame;
+
+            //    if (passive_game != null)
+            //    {
+            //        passive_game.Success += (doc) =>
+            //        {
+            //            Thread.Sleep(1000);
+            //            Dispatcher.InvokeAsync(() =>
+            //            {
+            //                MainContent.Child = new ListPlayer();
+            //            });
+            //        };
+
+            //        passive_game.ReadyCallback += (doc) =>
+            //        {
+            //            Dispatcher.InvokeAsync(() =>
+            //            {
+            //                MainContent.Child = new OnlineBoard();
+            //                passive_game.PlayPassiveGame(PassiveGame.rival_id);
+            //            });
+            //        };
+            //    }
+            //}
         }
         public MainWindow()
         {
@@ -121,17 +153,17 @@ namespace CaroMVVM
 
         public void ShowSinglePlayer()
         {
-            Render(new SinglePlayer(), new Board()); // Khởi tạo 2 lần nhưng vẫn ok do đã xử lý
+            Render(new SinglePlayer(), new Board()); 
         }
 
         public void ShowCreateGame()
         {
-            Render(ProactiveGame.Game, new Grid()); // Đã fix khởi tạo game 2 lần
+            Render(new GameOnline(), new Grid()); 
         }
 
         public void ShowFindGame()
         {
-            Render(PassiveGame.Game, new Grid()); // Đã fix khởi tạo 2 lần
+            Render(new GameOnline(false), new Grid()); 
         }
 
     }

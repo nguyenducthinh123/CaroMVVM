@@ -13,7 +13,9 @@ namespace System
         {
             if (path == null)
             {
-                path = Environment.CurrentDirectory + "/config.json";
+                path = Environment.CurrentDirectory + "/config.json"; // trả về thư mục làm việc hiện tại của ứng dụng, sẽ gặp lỗi khi build Window App
+                //path = AppDomain.CurrentDomain.BaseDirectory + "\\config.json"; // đây là đường dẫn tuyệt đối, trả về thư mục gốc chứa tệp thực thi (.exe)
+
             }
             try
             {

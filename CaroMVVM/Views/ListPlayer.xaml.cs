@@ -23,17 +23,31 @@ namespace CaroMVVM.Views
         public ListPlayer()
         {
             InitializeComponent();
-            AddPlayer();
+            int count = 1;
+            MainWindow.dataContextChanged += (vm) =>
+            {
+                if (count-- > 0)
+                {
+                    Dispatcher.InvokeAsync(() =>
+                    {
+                        var gameOnline = vm as GameOnline;
+                        if (gameOnline == null) return;
+                        AddPlayer(gameOnline);
+                        gameOnline.Start();
+                    });
+                }
+            };
         }
 
-        public void AddPlayer()
+        public void AddPlayer(object vm)
         {
-            if (Game.Flag)
+            var gameOnline = vm as GameOnline;
+            if (gameOnline == null) return;
+
+            Dictionary<string, bool> itemName = new Dictionary<string, bool>();
+            if (gameOnline.IsProactive)
             {
-                var game = ProactiveGame.Game;
-                game.Start();
-                Dictionary<string, bool> itemName = new Dictionary<string, bool>();
-                game.JoinCallback += (doc) =>
+                gameOnline.JoinCallback += (doc) =>
                 {
                     Dispatcher.InvokeAsync(() =>
                     {
@@ -47,7 +61,7 @@ namespace CaroMVVM.Views
                             lstItem.Content = name;
                             lstItem.MouseLeftButtonUp += (s, e) =>
                             {
-                                game.SendReady(id);
+                                gameOnline.SendReady(id);
                             };
                             lstPlayer.Items.Add(lstItem);
                         }
@@ -56,10 +70,7 @@ namespace CaroMVVM.Views
             }
             else
             {
-                var game = PassiveGame.Game;
-                game.Start();
-                Dictionary<string, bool> itemName = new Dictionary<string, bool>();
-                game.FoundCallback += (doc) => {
+                gameOnline.FoundCallback += (doc) => {
                     Dispatcher.InvokeAsync(() =>
                     {
                         ListViewItem lstItem = new ListViewItem();
@@ -72,7 +83,7 @@ namespace CaroMVVM.Views
                             lstItem.Content = name;
                             lstItem.MouseLeftButtonUp += (s, e) =>
                             {
-                                game.SendJoin(id);
+                                gameOnline.SendJoin(id);
                             };
                             lstPlayer.Items.Add(lstItem);
                         }

@@ -21,7 +21,7 @@ namespace System
         public event Action<Document> GameOver;
         //public event EventHandler<GameEventArg> GameOver;
 
-        public static bool Flag { get; set; } = true;
+        //public static bool Flag { get; set; } = true;
 
         public Player Player
         {
@@ -72,6 +72,13 @@ namespace System
             RaiseChanged(cellMatrix);
             SwitchPlayer();
         }
+
+        public void PutFirstByRival(Player player)
+        {
+            SwitchPlayer();
+            PutFirstPlayer();
+        }
+
 
         protected void RaiseChanged(Document doc) => Changed?.Invoke(doc);
         protected void RaiseGameOver(Document doc) => GameOver?.Invoke(doc);

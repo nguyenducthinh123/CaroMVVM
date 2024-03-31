@@ -10,7 +10,8 @@ namespace System
     {
         public override object GetBindingData()
         {
-            return Copy(Setting);
+            var singleGame = (SinglePlayer)(Copy(Setting));
+            return singleGame;
         }
 
         public override void Start()

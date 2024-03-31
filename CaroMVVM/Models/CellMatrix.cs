@@ -35,7 +35,7 @@ namespace System
 
             if (check) 
             {
-                Func<int, int, bool> over = (dr, dc) => Calculate(dr, dc, true) >= 4;
+                Func<int, int, bool> over = (dr, dc) => calculate(dr, dc, true) >= 4;
                 if (over(0, 1) || over(1, 0) || over(1, 1) || over(-1, 1))
                 {
                     Value = player;
@@ -51,7 +51,7 @@ namespace System
             return SetCell(sz >> 1, sz >> 1, player, false);
         }
 
-        public int Calculate(int dr, int dc, bool invert)
+        int calculate(int dr, int dc, bool invert) // cho thành private là hợp lý
         {
             int r = Row + dr;
             int c = Column + dc;
@@ -63,7 +63,7 @@ namespace System
                 r += dr;
                 c += dc;
             }
-            if (invert) s += Calculate(-dr, -dc, false); // cộng với invert
+            if (invert) s += calculate(-dr, -dc, false); // cộng với invert
             return s;
         }
     }
