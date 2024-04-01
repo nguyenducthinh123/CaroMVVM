@@ -63,7 +63,8 @@ namespace CaroMVVM
             {
                 Thread.Sleep(1000);
                 Dispatcher.InvokeAsync(() => {
-                    Render(viewModel, new ListPlayer());
+                    MainContent.Child = new ListPlayer();
+                    RaiseDataContextChanged(DataContext);
                 });
             };
 
@@ -73,7 +74,8 @@ namespace CaroMVVM
                 {
                     Dispatcher.InvokeAsync(() =>
                     {
-                      Render(viewModel, new OnlineBoard());
+                        MainContent.Child = new OnlineBoard();
+                        RaiseDataContextChanged(DataContext);
                     });
                 };
             }
@@ -83,7 +85,8 @@ namespace CaroMVVM
                 {
                     Dispatcher.InvokeAsync(() =>
                     {
-                        Render(viewModel, new OnlineBoard());
+                        MainContent.Child = new OnlineBoard();
+                        RaiseDataContextChanged(DataContext);
                     });
                 };
             }

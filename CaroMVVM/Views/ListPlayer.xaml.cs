@@ -28,13 +28,10 @@ namespace CaroMVVM.Views
             {
                 if (count-- > 0)
                 {
-                    Dispatcher.InvokeAsync(() =>
-                    {
-                        var gameOnline = vm as GameOnline;
-                        if (gameOnline == null) return;
-                        AddPlayer(gameOnline);
-                        gameOnline.Start();
-                    });
+                    var gameOnline = vm as GameOnline;
+                    if (gameOnline == null) return;
+                    AddPlayer(gameOnline);
+                    gameOnline.Start();
                 }
             };
         }

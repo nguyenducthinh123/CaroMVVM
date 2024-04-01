@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace System
 {
@@ -22,7 +24,7 @@ namespace System
         public bool IsProactive;
         bool send_flag = true;
         public bool MyTurn = true;
-        public bool FirstPassiveMove = false;
+        public bool FirstMove = true;
         
         public string rival_id;
 
@@ -61,6 +63,7 @@ namespace System
                 Broker.Listen("join/" + ObjectId, (doc) =>
                 {
                     JoinCallback?.Invoke(doc);
+
                 });
                 Task.Run(() => {
                     while (true)
@@ -115,28 +118,32 @@ namespace System
         {
             string play_topic = "play/" + id;
             Broker.Listen(play_topic, (doc) => {
-                PutAndCheckOver(doc.Row, doc.Column);
-                Caption = $"Row = {doc.Row}, Col = {doc.Column}";
-                if (doc.IsWin) {
-                    RaiseGameOver(doc);
-                    return;
-                }
-                MyTurn = true;
+                Task.Run(() => {
+                    PutAndCheckOver(doc.Row, doc.Column);
+                    Caption = $"Row = {doc.Row}, Col = {doc.Column}";
+                    if (doc.IsWin)
+                    {
+                        RaiseGameOver(doc);
+                        return;
+                    }
+                    MyTurn = true;
+                });
             });
             if (IsProactive)
             {
                 Player = new Player { ObjectId = this.ObjectId, Icon = 'x' };
                 Player.Rival = new Player { ObjectId = id, Icon = 'o' };
                 PutFirstPlayer();
+                FirstMove = false;
             }
             else
             {
                 Player = new Player { ObjectId = this.ObjectId, Icon = 'o' };
                 Player.Rival = new Player { ObjectId = id, Icon = 'x' };
 
-                FirstPassiveMove = true;
                 PutFirstByRival(Player.Rival);
-                FirstPassiveMove = false;
+                Caption = $"Row = {Setting.Size >> 1}, Col = {Setting.Size >> 1}";
+                FirstMove = false;
             }
 
         }
@@ -153,10 +160,7 @@ namespace System
             Player = Player.Rival;
             Player.Rival = temp;
 
-            if (!FirstPassiveMove)
-            {
-                MyTurn = false;
-            }
+            MyTurn = MyTurn ? false : true;
         }
     }
 }

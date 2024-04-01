@@ -26,10 +26,8 @@ namespace CaroMVVM.Views
             MainWindow.dataContextChanged += (vm) => {
                 var gameOnline = vm as GameOnline;
                 if (gameOnline == null) return;
-                Dispatcher.InvokeAsync(() => {
-                    Setup(gameOnline);
-                    gameOnline.PlayWith(gameOnline.rival_id);
-                });
+                Setup(gameOnline);
+                gameOnline.PlayWith(gameOnline.rival_id);
             };
             
         }
@@ -45,13 +43,13 @@ namespace CaroMVVM.Views
 
             gameOnline.Changed += (doc) =>
             {
-                int index = doc.Row * size + doc.Column;
-                var cell = grid.Children[index] as Piece;
                 Dispatcher.InvokeAsync(() =>
                 {
+                    int index = doc.Row * size + doc.Column;
+                    var cell = grid.Children[index] as Piece;
                     cell.Put(doc.Icon);
                 });
-                if (!gameOnline.FirstPassiveMove)
+                if (!gameOnline.FirstMove && gameOnline.MyTurn)
                 {
                     gameOnline.SendMove(doc.Row, doc.Column, doc.Value != null);
                 }
