@@ -156,7 +156,7 @@ namespace CaroMVVM
 
         public void ShowSinglePlayer()
         {
-            Render(new SinglePlayer(), new Board()); 
+            Render(new GameOffline(), new Board()); 
         }
 
         public void ShowCreateGame()

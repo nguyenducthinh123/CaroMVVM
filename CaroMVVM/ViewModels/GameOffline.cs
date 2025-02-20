@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace System
 {
-    public class SinglePlayer : Game
+    public class GameOffline : Game
     {
         public override object GetBindingData()
         {
-            var singleGame = (SinglePlayer)(Copy(Setting));
-            return singleGame;
+            var gameOffline = (GameOffline)(Copy(Setting));
+            return gameOffline;
         }
 
         public override void Start()
@@ -21,11 +21,6 @@ namespace System
             Player.Rival = new Player { Icon = 'o'}; // C# mới có kiểu khởi tạo thế này
             //Player.Rival.Icon = 'o';
             PutFirstPlayer();
-        }
-
-        public override void Dispose()
-        {
-            Move(Setting);
         }
 
         //static SinglePlayer game;

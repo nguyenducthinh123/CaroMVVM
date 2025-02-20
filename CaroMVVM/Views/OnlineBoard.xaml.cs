@@ -35,7 +35,7 @@ namespace CaroMVVM.Views
         public void Setup(object vm)
         {
             var gameOnline = vm as GameOnline;
-            int size = gameOnline.Size;
+            int size = gameOnline.Size / 2 * 2 + 1;
             int cell_size = gameOnline.CellSize;
 
             var grid = CreateBoard(size, cell_size);

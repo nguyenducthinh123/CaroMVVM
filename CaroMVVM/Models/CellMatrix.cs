@@ -35,7 +35,7 @@ namespace System
 
             if (check) 
             {
-                Func<int, int, bool> over = (dr, dc) => calculate(dr, dc, true) >= 4;
+                Func<int, int, bool> over = (dr, dc) => calculate(dr, dc, true) >= ViewModelBase.Setting.ConsecutiveCount - 1;
                 if (over(0, 1) || over(1, 0) || over(1, 1) || over(-1, 1))
                 {
                     Value = player;

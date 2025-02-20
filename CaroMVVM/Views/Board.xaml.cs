@@ -25,7 +25,7 @@ namespace CaroMVVM.Views
             InitializeComponent();
             MainWindow.dataContextChanged += (vm) =>
             {
-                var game = vm as SinglePlayer;
+                var game = vm as GameOffline;
                 if (game == null) return;
                 Setup(game);
                 game.Start();
@@ -35,8 +35,8 @@ namespace CaroMVVM.Views
 
         public void Setup(object vm)
         {
-            var game = vm as SinglePlayer;
-            int size = game.Size;
+            var game = vm as GameOffline;
+            int size = game.Size / 2 * 2 + 1;
             int cell_size = game.CellSize;
 
             var grid = CreateBoard(size, cell_size);

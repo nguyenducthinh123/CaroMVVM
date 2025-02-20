@@ -25,7 +25,8 @@ namespace System
                 {
                     Name = "Guest",
                     Size = 21,
-                    CellSize = 20
+                    CellSize = 20,
+                    ConsecutiveCount = 5
                 };
                 System.IO.File.WriteAllText(path, defaultDoc.ToString());
             }
@@ -41,6 +42,7 @@ namespace System
                 Name = "Guest";
                 Size = 21;
                 CellSize = 20;
+                ConsecutiveCount = 5;
             }
         }
         public void Save(Document src) => System.IO.File.WriteAllText(path, src.ToString());

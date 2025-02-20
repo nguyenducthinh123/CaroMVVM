@@ -16,7 +16,8 @@ namespace System
         public string CColor { get { return GetString(nameof(CColor)); } set => Push(nameof(CColor), value); } // CellColor
         public string XColor { get { return GetString(nameof(XColor)); } set => Push(nameof(XColor), value); }
         public string OColor { get { return GetString(nameof(OColor)); } set => Push(nameof(OColor), value); }
-        public int CellSize { get {  return GetValue<int>(nameof(CellSize));} set => Push(nameof(CellSize), value); }
-        public bool IsWin { get {  return GetValue<bool>(nameof(IsWin));} set => Push(nameof(IsWin), value); }
+        public int CellSize { get { return GetValue<int>(nameof(CellSize)); } set => Push(nameof(CellSize), value); }
+        public bool IsWin { get { return GetValue<bool>(nameof(IsWin)); } set => Push(nameof(IsWin), value); }
+        public int ConsecutiveCount { get { return GetValue<int>(nameof(ConsecutiveCount)); } set => Push(nameof(ConsecutiveCount), value); }
     }
 }
