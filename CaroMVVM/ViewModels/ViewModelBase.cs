@@ -56,10 +56,7 @@ namespace System
 
         public virtual object GetBindingData() => this;
         public abstract void Start();
-        public virtual void Dispose()
-        {
-
-        }
+        public virtual void Dispose() { }
 
     }
 }

@@ -17,8 +17,10 @@ namespace System
         public override void Start()
         {
             base.Start();
+            CellMatrix = new CellMatrix(Size, ConsecutiveCount);
+            Player = new Player();
+            Player.Rival = new Player { Icon = 'o' }; // C# mới có kiểu khởi tạo thế này
             Caption = "Play Single Game !!!";
-            Player.Rival = new Player { Icon = 'o'}; // C# mới có kiểu khởi tạo thế này
             //Player.Rival.Icon = 'o';
             PutFirstPlayer();
         }

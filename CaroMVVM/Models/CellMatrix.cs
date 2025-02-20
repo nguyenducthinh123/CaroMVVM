@@ -10,15 +10,12 @@ namespace System
     public class CellMatrix : Document
     {
         char[,] cells;
-        public CellMatrix()
-        {
-            int size = ViewModelBase.Setting.Size;
-            cells = new char[size, size];
-        }
 
-        public void SetSize(int size)
+        public CellMatrix(int size, int consecutiveCount)
         {
-            Size = size;
+            Size = size; // property đã có setter
+            ConsecutiveCount = consecutiveCount;
+            cells = new char[size, size];
         }
 
         public bool IsCellEmpty(int row, int col)
@@ -35,7 +32,7 @@ namespace System
 
             if (check) 
             {
-                Func<int, int, bool> over = (dr, dc) => calculate(dr, dc, true) >= ViewModelBase.Setting.ConsecutiveCount - 1;
+                Func<int, int, bool> over = (dr, dc) => calculate(dr, dc, true) >= ConsecutiveCount - 1;
                 if (over(0, 1) || over(1, 0) || over(1, 1) || over(-1, 1))
                 {
                     Value = player;
@@ -47,7 +44,7 @@ namespace System
 
         public Document SetCenter(Player player)
         {
-            int sz = ViewModelBase.Setting.Size;
+            int sz = Size;
             return SetCell(sz >> 1, sz >> 1, player, false);
         }
 
@@ -56,7 +53,7 @@ namespace System
             int r = Row + dr;
             int c = Column + dc;
             int s = 0;
-            int sz = ViewModelBase.Setting.Size;
+            int sz = Size;
             while (r >= 0 && r < sz && c >= 0 && c < sz && cells[r, c] == Icon)
             {
                 ++s;

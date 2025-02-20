@@ -39,21 +39,28 @@ namespace System
             }
         }
 
-        public override void Start()
+        public CellMatrix CellMatrix
         {
-            cellMatrix = new CellMatrix();
-            Player = new Player();
+            get
+            {
+                if (cellMatrix == null)
+                {
+                    cellMatrix = new CellMatrix(Size, ConsecutiveCount);
+                }
+                return cellMatrix;
+            }
+            set
+            {
+                cellMatrix = value;
+            }
         }
 
-        public override void Dispose()
-        {
-
-        }
+        public override void Start() { }
 
         public void PutAndCheckOver(int row, int col)
         {
-            if (!cellMatrix.IsCellEmpty(row, col)) return; // cell không trống thì mới điền
-            var move = cellMatrix.SetCell(row, col, current, true);
+            if (!CellMatrix.IsCellEmpty(row, col)) return; // cell không trống thì mới điền
+            var move = CellMatrix.SetCell(row, col, Player, true);
             RaiseChanged(move);
             if (move.Value == null) // nếu đã Win thì Value khác null
             {
@@ -68,8 +75,8 @@ namespace System
 
         public void PutFirstPlayer()
         {
-            cellMatrix.SetCenter(current);
-            RaiseChanged(cellMatrix);
+            CellMatrix.SetCenter(Player);
+            RaiseChanged(CellMatrix);
             SwitchPlayer();
         }
 
@@ -79,16 +86,11 @@ namespace System
             PutFirstPlayer();
         }
 
-
         protected void RaiseChanged(Document doc) => Changed?.Invoke(doc);
         protected void RaiseGameOver(Document doc) => GameOver?.Invoke(doc);
 
-        
-
         //protected void RaiseGameOver(Document doc) => GameOver?.Invoke(this, new GameEventArg { Document = doc });
-        protected virtual void SwitchPlayer()
-        {
-
-        }
+        protected virtual void SwitchPlayer() { }
+      
     }
 }
