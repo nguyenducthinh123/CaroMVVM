@@ -13,10 +13,23 @@ namespace System
         {
             if (path == null)
             {
-                path = Environment.CurrentDirectory + "/config.json"; // trả về thư mục làm việc hiện tại của ứng dụng, sẽ gặp lỗi khi build Window App
-                //path = AppDomain.CurrentDomain.BaseDirectory + "\\config.json"; // đây là đường dẫn tuyệt đối, trả về thư mục gốc chứa tệp thực thi (.exe)
+                // path = Environment.CurrentDirectory + "/config.json"; // trả về thư mục làm việc hiện tại của ứng dụng, sẽ gặp lỗi khi build Window App
+                path = AppDomain.CurrentDomain.BaseDirectory + "config.json"; // đây là đường dẫn tuyệt đối, trả về thư mục gốc chứa tệp thực thi (.exe)
 
             }
+
+            if (!System.IO.File.Exists(path))
+            {
+                // Create a new file with default content
+                var defaultDoc = new Document
+                {
+                    Name = "Guest",
+                    Size = 21,
+                    CellSize = 20
+                };
+                System.IO.File.WriteAllText(path, defaultDoc.ToString());
+            }
+
             try
             {
                 var content = System.IO.File.ReadAllText(path);
@@ -25,7 +38,7 @@ namespace System
             }
             catch
             {
-                Name = "Debug";
+                Name = "Guest";
                 Size = 21;
                 CellSize = 20;
             }

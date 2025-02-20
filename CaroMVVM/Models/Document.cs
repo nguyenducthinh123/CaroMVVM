@@ -13,7 +13,7 @@ namespace System
         public int Row { get { return GetValue<int>(nameof(Row)); } set => Push(nameof(Row), value); }
         public int Column { get { return GetValue<int>(nameof(Column)); } set => Push(nameof(Column), value); }
         public char Icon { get { return GetValue<char>(nameof(Icon)); } set => Push(nameof(Icon), value); }
-        public string CColor { get { return GetString(nameof(CColor)); } set => Push(nameof(CColor), value); }
+        public string CColor { get { return GetString(nameof(CColor)); } set => Push(nameof(CColor), value); } // CellColor
         public string XColor { get { return GetString(nameof(XColor)); } set => Push(nameof(XColor), value); }
         public string OColor { get { return GetString(nameof(OColor)); } set => Push(nameof(OColor), value); }
         public int CellSize { get {  return GetValue<int>(nameof(CellSize));} set => Push(nameof(CellSize), value); }
