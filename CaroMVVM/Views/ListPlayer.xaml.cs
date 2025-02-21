@@ -20,19 +20,19 @@ namespace CaroMVVM.Views
     /// </summary>
     public partial class ListPlayer : UserControl
     {
+        private static bool IsSubscribed = false;
+
         public ListPlayer()
         {
             InitializeComponent();
-            int count = 1;
-            MainWindow.dataContextChanged += (vm) =>
+            if (IsSubscribed) return;
+            MainWindow.openListPlayer += (vm) =>
             {
-                if (count-- > 0)
-                {
-                    var gameOnline = vm as GameOnline;
-                    if (gameOnline == null) return;
-                    AddPlayer(gameOnline);
-                    gameOnline.Start();
-                }
+                IsSubscribed = true;
+                var gameOnline = vm as GameOnline;
+                if (gameOnline == null) return;
+                AddPlayer(gameOnline);
+                gameOnline.Start();
             };
         }
 

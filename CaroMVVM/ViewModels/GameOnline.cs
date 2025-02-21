@@ -10,8 +10,6 @@ namespace System
 {
     public class GameOnline : Game
     {
-        // event dùng chung
-        public event Action<Document> Success;
 
         // event dùng cho Proactive
         public event Action<Document> JoinCallback;
@@ -31,24 +29,16 @@ namespace System
         public GameOnline(bool isProactive = true)
         {
             IsProactive = isProactive;
-            Broker.Connect();
             ObjectId = IsProactive ? "proactive" : "passive"; // dùng để debug thôi, sau này thay bằng Broker.ID
             Name = IsProactive ? "pro debug" : "passive debug"; // dùng để debug thôi, sau này gán bằng Setting.Name
-
-            Broker.Connected += () =>
-            {
-                Caption = "Success Connect to MQTT !!!";
-                Success?.Invoke(this);
-                Caption = "Choose Player";
-            };
         }
 
         public override object GetBindingData()
         {
             var gameOnline = (GameOnline)(Copy(Setting));
-            gameOnline.IsProactive = IsProactive;
-            gameOnline.ObjectId = ObjectId;
-            gameOnline.Name = Name;
+            //gameOnline.IsProactive = IsProactive;
+            //gameOnline.ObjectId = ObjectId;
+            //gameOnline.Name = Name;
 
             return gameOnline;
         }
@@ -133,6 +123,7 @@ namespace System
             {
                 Player = new Player { ObjectId = this.ObjectId, Icon = 'x' };
                 Player.Rival = new Player { ObjectId = id, Icon = 'o' };
+                CellMatrix = new CellMatrix(Setting.SizeOnline, Setting.ConsecutiveCountOnline);
                 PutFirstPlayer();
                 FirstMove = false;
             }

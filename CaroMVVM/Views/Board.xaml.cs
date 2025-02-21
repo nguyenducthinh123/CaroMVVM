@@ -20,11 +20,15 @@ namespace CaroMVVM.Views
     /// </summary>
     public partial class Board : UserControl
     {
+        private static bool IsSubscribed = false;
+
         public Board()
         {
             InitializeComponent();
+            if (IsSubscribed) return;
             MainWindow.dataContextChanged += (vm) =>
             {
+                IsSubscribed = true;
                 var game = vm as GameOffline;
                 if (game == null) return;
                 Setup(game);
@@ -36,7 +40,7 @@ namespace CaroMVVM.Views
         public void Setup(object vm)
         {
             var game = vm as GameOffline;
-            int size = game.Size / 2 * 2 + 1;
+            int size = game.Size;
             int cell_size = game.CellSize;
 
             var grid = CreateBoard(size, cell_size);
@@ -59,7 +63,7 @@ namespace CaroMVVM.Views
                 Task.Run(() => {
                     if (doc.Icon == 'x' || doc.Icon == 'o')
                     {
-                        doc.Icon -= ' ';
+                        doc.Icon -= ' '; // upcase
                         MessageBox.Show(doc.Icon + " Win");
                     }
                 });

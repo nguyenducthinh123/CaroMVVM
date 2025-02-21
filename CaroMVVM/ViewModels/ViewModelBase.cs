@@ -30,6 +30,17 @@ namespace System
             }
         }
 
+        string caption;
+        public string Caption
+        {
+            get => caption;
+            set
+            {
+                caption = value;
+                CaptionChanged?.Invoke();
+            }
+        }
+
         static Broker broker;
         static public Broker Broker
         {
@@ -40,17 +51,6 @@ namespace System
                     broker = new Broker();
                 }
                 return broker;
-            }
-        }
-
-        string caption;
-        public string Caption
-        {
-            get => caption;
-            set
-            {
-                caption = value;
-                CaptionChanged?.Invoke();
             }
         }
 

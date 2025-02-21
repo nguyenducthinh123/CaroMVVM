@@ -8,6 +8,7 @@ namespace System
 {
     internal class SettingViewModel : ViewModelBase
     {
+
         public override object GetBindingData()
         {
             return Copy(Setting);

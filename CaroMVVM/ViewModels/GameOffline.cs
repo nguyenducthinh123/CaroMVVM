@@ -20,7 +20,7 @@ namespace System
             CellMatrix = new CellMatrix(Size, ConsecutiveCount);
             Player = new Player();
             Player.Rival = new Player { Icon = 'o' }; // C# mới có kiểu khởi tạo thế này
-            Caption = "Play Single Game !!!";
+            Caption = $"Play Single Game. Consecutive Count = {ConsecutiveCount}";
             //Player.Rival.Icon = 'o';
             PutFirstPlayer();
         }

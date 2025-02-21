@@ -19,5 +19,11 @@ namespace System
         public int CellSize { get { return GetValue<int>(nameof(CellSize)); } set => Push(nameof(CellSize), value); }
         public bool IsWin { get { return GetValue<bool>(nameof(IsWin)); } set => Push(nameof(IsWin), value); }
         public int ConsecutiveCount { get { return GetValue<int>(nameof(ConsecutiveCount)); } set => Push(nameof(ConsecutiveCount), value); }
+
+        #region match online
+        public int SizeOnline { get { return GetValue<int>(nameof(SizeOnline)); } set => Push(nameof(SizeOnline), value); }
+        public int CellSizeOnline { get { return GetValue<int>(nameof(CellSizeOnline)); } set => Push(nameof(CellSizeOnline), value); }
+        public int ConsecutiveCountOnline { get { return GetValue<int>(nameof(ConsecutiveCountOnline)); } set => Push(nameof(ConsecutiveCountOnline), value); }
+        #endregion
     }
 }

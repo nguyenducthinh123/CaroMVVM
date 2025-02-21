@@ -13,6 +13,8 @@ namespace CaroMVVM
 {
     using System;
     using System.Reflection;
+    using System.Security.RightsManagement;
+    using System.Windows.Media.Animation;
     using Views;
 
     /// <summary>
@@ -23,6 +25,10 @@ namespace CaroMVVM
     {
         public static event Action<object> dataContextChanged;
         public void RaiseDataContextChanged(object vm) => dataContextChanged?.Invoke(vm);
+        public static event Action<object> openListPlayer;
+        public void RaiseOpenListPlayer(object vm) => openListPlayer?.Invoke(vm);
+        public static event Action<object> openOnlineBoard;
+        public void RaiseOpenOnlineBoard(object vm) => openOnlineBoard?.Invoke(vm);
 
         void ApplyMenu(ItemCollection items)
         {
@@ -44,7 +50,8 @@ namespace CaroMVVM
             var vm = viewModel as ViewModelBase;
             if (vm == null) return;
 
-            vm.CaptionChanged += () => {
+            vm.CaptionChanged += () =>
+            {
                 Dispatcher.InvokeAsync(() =>
                 {
                     Banner.DataContext = null;
@@ -58,15 +65,20 @@ namespace CaroMVVM
 
             var gameOnline = viewModel as GameOnline;
             if (gameOnline == null) return;
-          
-            gameOnline.Success += (doc) =>
+
+            if (!NetworkHelper.HasInternetAccess)
             {
-                Thread.Sleep(1000);
-                Dispatcher.InvokeAsync(() => {
-                    MainContent.Child = new ListPlayer();
-                    RaiseDataContextChanged(DataContext);
-                });
-            };
+                gameOnline.Caption = "Lost connection to internet. Can't play online mode";
+                return;
+            }
+
+            ViewModelBase.Broker.Connect();
+
+            gameOnline.Caption = "Choose a player";
+            Dispatcher.InvokeAsync(() => {
+                MainContent.Child = new ListPlayer();
+                RaiseOpenListPlayer(DataContext);
+            });
 
             if (gameOnline.IsProactive)
             {
@@ -75,7 +87,7 @@ namespace CaroMVVM
                     Dispatcher.InvokeAsync(() =>
                     {
                         MainContent.Child = new OnlineBoard();
-                        RaiseDataContextChanged(DataContext);
+                        RaiseOpenOnlineBoard(DataContext);
                     });
                 };
             }
@@ -86,66 +98,24 @@ namespace CaroMVVM
                     Dispatcher.InvokeAsync(() =>
                     {
                         MainContent.Child = new OnlineBoard();
-                        RaiseDataContextChanged(DataContext);
+                        RaiseOpenOnlineBoard(DataContext);
                     });
                 };
             }
-            //if (Game.Flag)
-            //{
-            //    var pro_game = viewModel as ProactiveGame;
 
-            //    if (pro_game != null)
-            //    {
-            //        pro_game.Success += (doc) =>
-            //        {
-            //            Thread.Sleep(1000);
-            //            Dispatcher.InvokeAsync(() =>
-            //            {
-            //                MainContent.Child = new ListPlayer();
-            //            });
-            //        };
-
-            //        pro_game.ReadyPlay += (doc) =>
-            //        {
-            //            Dispatcher.InvokeAsync(() =>
-            //            {
-            //                MainContent.Child = new OnlineBoard();
-            //                pro_game.PlayProactiveGame(ProactiveGame.rival_id);
-            //            });
-            //        };
-            //    }
-            //}
-            //else
-            //{
-            //    var passive_game = viewModel as PassiveGame;
-
-            //    if (passive_game != null)
-            //    {
-            //        passive_game.Success += (doc) =>
-            //        {
-            //            Thread.Sleep(1000);
-            //            Dispatcher.InvokeAsync(() =>
-            //            {
-            //                MainContent.Child = new ListPlayer();
-            //            });
-            //        };
-
-            //        passive_game.ReadyCallback += (doc) =>
-            //        {
-            //            Dispatcher.InvokeAsync(() =>
-            //            {
-            //                MainContent.Child = new OnlineBoard();
-            //                passive_game.PlayPassiveGame(PassiveGame.rival_id);
-            //            });
-            //        };
-            //    }
-            //}
         }
         public MainWindow()
         {
             InitializeComponent();
             ShowSetting();
-
+            if (!NetworkHelper.HasInternetAccess)
+            {
+                MessageBox.Show("No internet. Can't play online mode");
+            }
+            else
+            {
+                ViewModelBase.Broker.Connect();
+            }
             ApplyMenu(MainMenu.Items);
         }
 
@@ -161,6 +131,8 @@ namespace CaroMVVM
 
         public void ShowCreateGame()
         {
+            var settingsPopup = new SettingPopup();
+            settingsPopup.ShowDialog();
             Render(new GameOnline(), new Grid()); 
         }
 
@@ -168,6 +140,5 @@ namespace CaroMVVM
         {
             Render(new GameOnline(false), new Grid()); 
         }
-
     }
 }

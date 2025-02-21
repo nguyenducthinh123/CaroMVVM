@@ -20,10 +20,14 @@ namespace CaroMVVM.Views
     /// </summary>
     public partial class OnlineBoard : UserControl
     {
+        private static bool IsSubscribed = false;
+
         public OnlineBoard()
         {
             InitializeComponent();
-            MainWindow.dataContextChanged += (vm) => {
+            if (IsSubscribed) return;
+            MainWindow.openOnlineBoard += (vm) => {
+                IsSubscribed = true;
                 var gameOnline = vm as GameOnline;
                 if (gameOnline == null) return;
                 Setup(gameOnline);
@@ -35,7 +39,7 @@ namespace CaroMVVM.Views
         public void Setup(object vm)
         {
             var gameOnline = vm as GameOnline;
-            int size = gameOnline.Size / 2 * 2 + 1;
+            int size = gameOnline.Size;
             int cell_size = gameOnline.CellSize;
 
             var grid = CreateBoard(size, cell_size);

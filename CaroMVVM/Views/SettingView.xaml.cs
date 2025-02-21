@@ -20,11 +20,15 @@ namespace CaroMVVM.Views
     /// </summary>
     public partial class SettingView : UserControl
     {
+        private static bool IsSubscribed = false;
+
         public SettingView()
         {
             InitializeComponent();
+            if (IsSubscribed) return; // đk rồi thì thôi
             MainWindow.dataContextChanged += (vm) =>
             {
+                IsSubscribed = true;
                 var settingVm = vm as SettingViewModel;
                 if (settingVm == null) return;
 
