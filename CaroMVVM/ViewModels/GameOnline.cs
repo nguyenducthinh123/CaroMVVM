@@ -29,8 +29,8 @@ namespace System
         public GameOnline(bool isProactive = true)
         {
             IsProactive = isProactive;
-            ObjectId = IsProactive ? "proactive" : "passive"; // dùng để debug thôi, sau này thay bằng Broker.ID
-            Name = IsProactive ? "pro debug" : "passive debug"; // dùng để debug thôi, sau này gán bằng Setting.Name
+            ObjectId = Broker.ID; // dùng để debug thôi, sau này thay bằng Broker.ID. IsProactive ? "proactive" : "passive"
+            Name = IsProactive ? "pro debug" : "passive debug"; // dùng để debug thôi, sau này gán bằng Name
         }
 
         public override object GetBindingData()
@@ -102,6 +102,7 @@ namespace System
             rival_id = id;
 
             Broker.Listen("ready/" + ObjectId, (doc) => {
+                if (doc.SizeOnline == 0) return;
                 Caption = "Play Passive Game";
                 ReadyCallback?.Invoke(doc);
             });

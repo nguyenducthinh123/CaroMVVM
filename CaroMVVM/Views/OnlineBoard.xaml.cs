@@ -56,6 +56,7 @@ namespace CaroMVVM.Views
                 if (!gameOnline.FirstMove && gameOnline.MyTurn)
                 {
                     gameOnline.SendMove(doc.Row, doc.Column, doc.Value != null);
+                    gameOnline.Caption = "Waiting for your turn...";
                 }
             };
 
@@ -71,7 +72,7 @@ namespace CaroMVVM.Views
                     if (doc.Icon == 'x' || doc.Icon == 'o')
                     {
                         doc.Icon -= ' ';
-                        MessageBox.Show(doc.Icon + " Win");
+                        MessageBox.Show($"{doc.Icon} Win");
                     }
                 });
             };
