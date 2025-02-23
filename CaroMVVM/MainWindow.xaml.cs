@@ -72,7 +72,7 @@ namespace CaroMVVM
                 return;
             }
 
-            ViewModelBase.Broker.Connect();
+            if (!ViewModelBase.Broker.IsConnected) ViewModelBase.Broker.Connect(); // reconnect to MQTT if state is error
 
             gameOnline.Caption = "Choose a player";
             Dispatcher.InvokeAsync(() => {
@@ -86,7 +86,7 @@ namespace CaroMVVM
                 {
                     Dispatcher.InvokeAsync(() =>
                     {
-                        MainContent.Child = new OnlineBoard();
+                        MainContent.Child = new OnlineBoard(doc);
                         RaiseOpenOnlineBoard(DataContext);
                     });
                 };
@@ -97,7 +97,7 @@ namespace CaroMVVM
                 {
                     Dispatcher.InvokeAsync(() =>
                     {
-                        MainContent.Child = new OnlineBoard();
+                        MainContent.Child = new OnlineBoard(doc);
                         RaiseOpenOnlineBoard(DataContext);
                     });
                 };
@@ -108,6 +108,7 @@ namespace CaroMVVM
         {
             InitializeComponent();
             ShowSetting();
+            ApplyMenu(MainMenu.Items);
             if (!NetworkHelper.HasInternetAccess)
             {
                 MessageBox.Show("No internet. Can't play online mode");
@@ -115,8 +116,7 @@ namespace CaroMVVM
             else
             {
                 ViewModelBase.Broker.Connect();
-            }
-            ApplyMenu(MainMenu.Items);
+            }   
         }
 
         public void ShowSetting()

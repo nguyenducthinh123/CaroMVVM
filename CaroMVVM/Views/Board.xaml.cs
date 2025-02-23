@@ -20,24 +20,19 @@ namespace CaroMVVM.Views
     /// </summary>
     public partial class Board : UserControl
     {
-        private static bool IsSubscribed = false;
-
         public Board()
         {
             InitializeComponent();
-            if (IsSubscribed) return;
             MainWindow.dataContextChanged += (vm) =>
             {
-                IsSubscribed = true;
                 var game = vm as GameOffline;
                 if (game == null) return;
                 Setup(game);
                 game.Start();
             };
-
         }
 
-        public void Setup(object vm)
+        private void Setup(object vm)
         {
             var game = vm as GameOffline;
             int size = game.Size;

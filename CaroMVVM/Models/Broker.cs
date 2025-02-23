@@ -16,7 +16,6 @@ namespace System
         }
         protected override void RaiseDataRecieved(string topic, byte[] message)
         {
-
             var content = message.UTF8();
             var doc = Document.Parse(content);
 

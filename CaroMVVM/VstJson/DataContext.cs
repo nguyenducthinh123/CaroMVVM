@@ -23,12 +23,12 @@ namespace System
             return doc;
         }
         public Document Copy(Document src) => Copy(src, null);
-        public Document Copy(Document src, IEnumerable<string> names)
+        public Document Copy(Document src, IEnumerable<string> names) 
         {
             if (names == null) names = src.Keys.ToArray();
             foreach (var name in names)
             {
-                if (this.ContainsKey(name) == false)
+                if (this.ContainsKey(name) == false) // chỉ copy những key chưa tồn tại trong đối tượng đó
                 {
                     object v = null;
                     src.TryGetValue(name, out v);

@@ -20,15 +20,11 @@ namespace CaroMVVM.Views
     /// </summary>
     public partial class ListPlayer : UserControl
     {
-        private static bool IsSubscribed = false;
-
         public ListPlayer()
         {
             InitializeComponent();
-            if (IsSubscribed) return;
             MainWindow.openListPlayer += (vm) =>
             {
-                IsSubscribed = true;
                 var gameOnline = vm as GameOnline;
                 if (gameOnline == null) return;
                 AddPlayer(gameOnline);
@@ -52,7 +48,7 @@ namespace CaroMVVM.Views
                         var name = doc.Name;
                         if (!itemName.ContainsKey(name))
                         {
-                            itemName[name] = true;
+                            itemName[name] = true; // mark as exist
                             var id = doc.ObjectId;
 
                             lstItem.Content = name;

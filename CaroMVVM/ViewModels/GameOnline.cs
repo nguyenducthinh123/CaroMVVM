@@ -80,14 +80,18 @@ namespace System
         public void SendReady(string id)
         {
             send_flag = false;
+            rival_id = id;
             string topic = "ready/" + id;
-            var doc = new Document { ObjectId = this.ObjectId, Name = this.Name };
+            var doc = new Document { 
+                SizeOnline = Setting.SizeOnline,
+                CellSizeOnline = Setting.CellSizeOnline,
+                ConsecutiveCountOnline = Setting.ConsecutiveCountOnline
+            };
             Broker.Send(topic, doc);
 
             Caption = "Playing Proactive Game";
             ReadyPlay?.Invoke(doc);
-
-            rival_id = id;
+            
         }
 
         // hàm này cho Passive
@@ -95,13 +99,13 @@ namespace System
         {
             var doc = new Document { ObjectId = this.ObjectId, Name = this.Name };
             Broker.Send("join/" + id, doc);
+            rival_id = id;
 
             Broker.Listen("ready/" + ObjectId, (doc) => {
                 Caption = "Play Passive Game";
                 ReadyCallback?.Invoke(doc);
-
-                rival_id = doc.ObjectId;
             });
+
         }
 
         public void PlayWith(string id)
@@ -110,7 +114,7 @@ namespace System
             Broker.Listen(play_topic, (doc) => {
                 Task.Run(() => {
                     PutAndCheckOver(doc.Row, doc.Column);
-                    Caption = $"Row = {doc.Row}, Col = {doc.Column}";
+                    Caption = $"Rival put : Row = {doc.Row}, Col = {doc.Column}, Consecutive Count = {ConsecutiveCountOnline}";
                     if (doc.IsWin)
                     {
                         RaiseGameOver(doc);
@@ -123,7 +127,7 @@ namespace System
             {
                 Player = new Player { ObjectId = this.ObjectId, Icon = 'x' };
                 Player.Rival = new Player { ObjectId = id, Icon = 'o' };
-                CellMatrix = new CellMatrix(Setting.SizeOnline, Setting.ConsecutiveCountOnline);
+                CellMatrix = new CellMatrix(SizeOnline, ConsecutiveCountOnline);
                 PutFirstPlayer();
                 FirstMove = false;
             }
@@ -131,9 +135,10 @@ namespace System
             {
                 Player = new Player { ObjectId = this.ObjectId, Icon = 'o' };
                 Player.Rival = new Player { ObjectId = id, Icon = 'x' };
+                CellMatrix = new CellMatrix(SizeOnline, ConsecutiveCountOnline);
 
                 PutFirstByRival(Player.Rival);
-                Caption = $"Row = {Setting.Size >> 1}, Col = {Setting.Size >> 1}";
+                Caption = $"Rival put : Row = {SizeOnline >> 1}, Col = {SizeOnline >> 1}";
                 FirstMove = false;
             }
 
